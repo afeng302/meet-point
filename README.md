@@ -1,4 +1,4 @@
 meet-point
 ==========
 
-this is synchronization implement
+this is synchronization implementation
