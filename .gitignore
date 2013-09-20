@@ -1,1 +1,4 @@
 *.suo
+/MeetPoint/MeetPoint/MeetPoint.csproj.user
+/MeetPoint/MeetPoint/bin
+/MeetPoint/MeetPoint/obj
