@@ -4,6 +4,7 @@ using System.Linq;
 using System.Text;
 using NUnit.Framework;
 using MeetPoint.src;
+using System.IO;
 
 namespace MeetPoint.test
 {
@@ -13,6 +14,8 @@ namespace MeetPoint.test
         [TestFixtureSetUp]
         public void FixtureSetUp()
         {
+            FileInfo fileInfo = new FileInfo("Log4Net.config");
+            log4net.Config.XmlConfigurator.Configure(fileInfo);
             MeetPointFactory.Clear();
         }
 
@@ -169,31 +172,7 @@ namespace MeetPoint.test
             string pointID = Guid.NewGuid().ToString();
             IMeetPoint meetPoint = MeetPointFactory.Create(pointID, 0, 2, out createdNew);
 
-            PreCondTask preTask1 = new PreCondTask(meetPoint, 2);
-            PostCondTask postTask1 = new PostCondTask(meetPoint, 1);
-            PostCondTask postTask2 = new PostCondTask(meetPoint, 1);
-
-            // before any condition arrive, the meet point keep blocked
-            Assert.IsTrue(meetPoint.IsBlocked);
-            Assert.IsTrue(preTask1.IsBlocked);
-            Assert.IsTrue(postTask1.IsBlocked);
-
-            postTask1.RunAsync();
-            Assert.IsTrue(postTask1.WaitArrive(1000));
-            // any condition arrival will change this meet point to unblocked
-            Assert.IsFalse(meetPoint.IsBlocked);
-            Assert.IsTrue(postTask1.WaitTaskUnblock(1000));
-            Assert.IsFalse(postTask1.IsBlocked);
-
-            postTask2.RunAsync();
-            Assert.IsTrue(postTask2.WaitArrive(1000));
-            Assert.IsTrue(postTask2.WaitTaskUnblock(1000));
-            Assert.IsFalse(postTask2.IsBlocked);
-
-            preTask1.RunAsync();
-            Assert.IsTrue(preTask1.WaitArrive(1000));
-            Assert.IsTrue(preTask1.WaitTaskUnblock(1000));
-            Assert.IsFalse(preTask1.IsBlocked);
+            Assert.IsNull(meetPoint);
         }
 
         [Test]

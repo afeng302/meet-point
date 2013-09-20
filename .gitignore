@@ -1,4 +1,6 @@
 *.suo
-/MeetPoint/MeetPoint/MeetPoint.csproj.user
-/MeetPoint/MeetPoint/bin/Debug
-/MeetPoint/MeetPoint/obj/Debug
+*.user
+[Bb]in
+[Db]ebug*/
+obj/
+[Rr]elease*/
