@@ -83,7 +83,7 @@ namespace MeetPoint.src
 
         public void PreCondArrive(object arriveContext, int number)
         {
-            lock(this.mre)
+            lock (this.mre)
             {
                 this.PreCondArrivedCount += number;
 
@@ -91,11 +91,11 @@ namespace MeetPoint.src
                 {
                     this.mre.Set();
                 }
-            }
 
-            if (arriveContext != null)
-            {
-                this.preCondArriveContextList.Add(arriveContext);
+                if (arriveContext != null)
+                {
+                    this.preCondArriveContextList.Add(arriveContext);
+                }
             }
 
             if (this.PreCondArrived != null)
@@ -116,11 +116,11 @@ namespace MeetPoint.src
             lock (this.mre)
             {
                 this.PostCondArrivedCount += number;
-            }
 
-            if (arriveContext != null)
-            {
-                this.postArriveContextList.Add(arriveContext);
+                if (arriveContext != null)
+                {
+                    this.postArriveContextList.Add(arriveContext);
+                }
             }
 
             if (this.PostCondArrived != null)
