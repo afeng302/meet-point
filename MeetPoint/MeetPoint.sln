@@ -3,6 +3,8 @@ Microsoft Visual Studio Solution File, Format Version 11.00
 # Visual Studio 2010
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "MeetPoint", "MeetPoint\MeetPoint.csproj", "{E0556D53-4292-405C-95D7-C4AF9FF3CE6E}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "ParallelTaskScheduler", "ParallelTaskScheduler\ParallelTaskScheduler.csproj", "{D2536D64-ECAB-4C19-9BD3-5E458A26F16D}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -13,6 +15,10 @@ Global
 		{E0556D53-4292-405C-95D7-C4AF9FF3CE6E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{E0556D53-4292-405C-95D7-C4AF9FF3CE6E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{E0556D53-4292-405C-95D7-C4AF9FF3CE6E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D2536D64-ECAB-4C19-9BD3-5E458A26F16D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D2536D64-ECAB-4C19-9BD3-5E458A26F16D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D2536D64-ECAB-4C19-9BD3-5E458A26F16D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D2536D64-ECAB-4C19-9BD3-5E458A26F16D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
