@@ -2,13 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using MeetPoint.src;
+using MeetPoint.Src;
 using System.Threading;
 using System.ComponentModel;
 using log4net;
 using System.Reflection;
 
-namespace ParallelTaskScheduler.src
+namespace ParallelTaskScheduler.Src
 {
     public static class ParallelTaskScheduler
     {

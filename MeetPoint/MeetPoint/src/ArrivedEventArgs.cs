@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace MeetPoint.src
+namespace MeetPoint.Src
 {
     public class ArrivedEventArgs : EventArgs
     {

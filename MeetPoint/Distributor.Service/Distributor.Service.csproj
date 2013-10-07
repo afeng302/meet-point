@@ -59,9 +59,7 @@
     <Compile Include="Src\Util\ServiceProxyFactory.cs" />
     <Compile Include="Src\Util\ServiceProxy\ServiceRealProxy.cs" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="test\" />
-  </ItemGroup>
+  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

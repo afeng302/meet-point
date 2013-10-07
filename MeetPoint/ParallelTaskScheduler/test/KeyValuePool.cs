@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 
-namespace ParallelTaskScheduler.test
+namespace ParallelTaskScheduler.Test
 {
     public class Result
     {

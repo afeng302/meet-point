@@ -4,7 +4,7 @@ using System.Linq;
 using System.Text;
 using System.Threading;
 
-namespace MeetPoint.src
+namespace MeetPoint.Src
 {
     class MeetPointImpl : IMeetPoint
     {

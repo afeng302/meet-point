@@ -2,12 +2,12 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using ParallelTaskScheduler.src;
+using ParallelTaskScheduler.Src;
 using System.Threading;
 using log4net;
 using System.Reflection;
 
-namespace ParallelTaskScheduler.test
+namespace ParallelTaskScheduler.Test
 {
     class TaskItemImpl : ITaskItem
     {
@@ -46,7 +46,7 @@ namespace ParallelTaskScheduler.test
             }
         }
 
-        public event src.EventHandler TaskCompleted;
+        public event Src.EventHandler TaskCompleted;
 
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
     }

@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using MeetPoint.src;
+using MeetPoint.Src;
 using System.Threading;
 
-namespace MeetPoint.test
+namespace MeetPoint.Test
 {
     class PostCondTask
     {
@@ -16,7 +16,7 @@ namespace MeetPoint.test
         {
             this.arriveTask = new ArriveTask(meetPoint, arrivedCount, false);
 
-            meetPoint.PostCondArrived += new src.EventHandler(meetPoint_PostCondArrived);
+            meetPoint.PostCondArrived += new Src.EventHandler(meetPoint_PostCondArrived);
         }
 
         void meetPoint_PostCondArrived(object sender, ArrivedEventArgs e)

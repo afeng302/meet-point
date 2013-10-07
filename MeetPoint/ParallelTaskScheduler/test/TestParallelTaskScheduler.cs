@@ -4,9 +4,9 @@ using System.Linq;
 using System.Text;
 using NUnit.Framework;
 using System.IO;
-using ParallelTaskScheduler.src;
+using ParallelTaskScheduler.Src;
 
-namespace ParallelTaskScheduler.test
+namespace ParallelTaskScheduler.Test
 {
     [TestFixture]
     class TestParallelTaskScheduler
@@ -50,7 +50,7 @@ namespace ParallelTaskScheduler.test
                 .AddOrdered(task4);
 
             DateTime t0 = DateTime.Now;
-            src.ParallelTaskScheduler.Schedule(container);
+            Src.ParallelTaskScheduler.Schedule(container);
             DateTime t1 = DateTime.Now;
 
             // total time (1000)
@@ -70,7 +70,7 @@ namespace ParallelTaskScheduler.test
                 .AddOrdered(task4);
 
             DateTime t0 = DateTime.Now;
-            src.ParallelTaskScheduler.Schedule(container);
+            Src.ParallelTaskScheduler.Schedule(container);
             DateTime t1 = DateTime.Now;
 
             // total time (1500)
@@ -115,7 +115,7 @@ namespace ParallelTaskScheduler.test
                 .AddOrdered(task4);
 
             DateTime t0 = DateTime.Now;
-            src.ParallelTaskScheduler.Schedule(container);
+            Src.ParallelTaskScheduler.Schedule(container);
             DateTime t1 = DateTime.Now;
 
             // total time (1500)

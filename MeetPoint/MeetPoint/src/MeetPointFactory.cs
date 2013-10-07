@@ -6,7 +6,7 @@ using System.Threading;
 using log4net;
 using System.Reflection;
 
-namespace MeetPoint.src
+namespace MeetPoint.Src
 {
     public static class MeetPointFactory
     {

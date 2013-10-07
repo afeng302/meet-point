@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using NUnit.Framework;
-using MeetPoint.src;
+using MeetPoint.Src;
 using System.IO;
 
-namespace MeetPoint.test
+namespace MeetPoint.Test
 {
     [TestFixture]
     class TestMeetPoint

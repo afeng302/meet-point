@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
-using MeetPoint.src;
+using MeetPoint.Src;
 using System.Threading;
 
-namespace MeetPoint.test
+namespace MeetPoint.Test
 {
     class PreCondTask
     {
@@ -16,7 +16,7 @@ namespace MeetPoint.test
         {
             this.arriveTask = new ArriveTask(meetPoint, arrivedCount, true);
 
-            meetPoint.PreCondArrived += new src.EventHandler(meetPoint_PreCondArrived);
+            meetPoint.PreCondArrived += new Src.EventHandler(meetPoint_PreCondArrived);
         }
 
         void meetPoint_PreCondArrived(object sender, ArrivedEventArgs e)

@@ -3,10 +3,10 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.ComponentModel;
-using MeetPoint.src;
+using MeetPoint.Src;
 using System.Threading;
 
-namespace MeetPoint.test
+namespace MeetPoint.Test
 {
     class ArriveTask
     {
