@@ -47,14 +47,14 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="src\ArrivedEventArgs.cs" />
-    <Compile Include="src\IMeetPoint.cs" />
-    <Compile Include="src\MeetPointFactory.cs" />
-    <Compile Include="src\MeetPointImpl.cs" />
-    <Compile Include="test\PostCondTask.cs" />
-    <Compile Include="test\TestMeetPoint.cs" />
-    <Compile Include="test\ArriveTask.cs" />
-    <Compile Include="test\PreCondTask.cs" />
+    <Compile Include="Src\ArrivedEventArgs.cs" />
+    <Compile Include="Src\IMeetPoint.cs" />
+    <Compile Include="Src\MeetPointFactory.cs" />
+    <Compile Include="Src\MeetPointImpl.cs" />
+    <Compile Include="Test\PostCondTask.cs" />
+    <Compile Include="Test\TestMeetPoint.cs" />
+    <Compile Include="Test\ArriveTask.cs" />
+    <Compile Include="Test\PreCondTask.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Log4Net.config">

@@ -48,14 +48,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="src\ITaskItem.cs" />
+    <Compile Include="Src\ITaskItem.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="src\TaskContainer.cs" />
-    <Compile Include="src\ParallelTaskNode.cs" />
-    <Compile Include="src\ParallelTaskScheduler.cs" />
-    <Compile Include="test\KeyValuePool.cs" />
-    <Compile Include="test\TaskItemImpl.cs" />
-    <Compile Include="test\TestParallelTaskScheduler.cs" />
+    <Compile Include="Src\TaskContainer.cs" />
+    <Compile Include="Src\ParallelTaskNode.cs" />
+    <Compile Include="Src\ParallelTaskScheduler.cs" />
+    <Compile Include="Test\KeyValuePool.cs" />
+    <Compile Include="Test\TaskItemImpl.cs" />
+    <Compile Include="Test\TestParallelTaskScheduler.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Log4Net.config">
