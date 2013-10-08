@@ -27,6 +27,8 @@ namespace ParallelTaskScheduler.Test
             set;
         }
 
+        public bool IsDistributable { get; private set; }
+
         public void Execute()
         {
             Log.DebugFormat("task [{0}] is Executing.", this.Name);

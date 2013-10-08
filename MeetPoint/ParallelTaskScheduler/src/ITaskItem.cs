@@ -9,11 +9,9 @@ namespace ParallelTaskScheduler.Src
 
     public interface ITaskItem
     {
-        string Name
-        {
-            get;
-            set;
-        }
+        string Name { get; set; }
+
+        bool IsDistributable { get; }
 
         void Execute();
 
