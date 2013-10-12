@@ -19,6 +19,7 @@ namespace ParallelTaskScheduler.Test
             this.Name = name;
             this.sleepMilliseconds = sleepMilliseconds;
             this.value = value;
+            this.IsDistributable = false;
         }
 
         public string Name
@@ -26,6 +27,8 @@ namespace ParallelTaskScheduler.Test
             get;
             set;
         }
+
+        public string ID { get; private set; }
 
         public bool IsDistributable { get; private set; }
 
@@ -51,5 +54,16 @@ namespace ParallelTaskScheduler.Test
         public event Src.EventHandler TaskCompleted;
 
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
+
+
+        public ValueType[] BoxFlyParams()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UnboxFlyParams(ValueType[] flyParams)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

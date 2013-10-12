@@ -47,6 +47,7 @@
     <Compile Include="Src\Contract\IFileRepositoryService.cs" />
     <Compile Include="Src\Contract\ILogin.cs" />
     <Compile Include="Src\Contract\ICapacityFactor.cs" />
+    <Compile Include="Src\Contract\TransferTaskItem.cs" />
     <Compile Include="Src\Contract\StorageFileInfo.cs" />
     <Compile Include="Src\Service\CallbackPushTaskService.cs" />
     <Compile Include="Src\Service\FileRepositoryService.cs" />

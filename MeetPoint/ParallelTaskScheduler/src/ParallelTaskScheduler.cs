@@ -7,13 +7,16 @@ using System.Threading;
 using System.ComponentModel;
 using log4net;
 using System.Reflection;
+using Distributor.Service.Src.Util;
 
 namespace ParallelTaskScheduler.Src
 {
     public static class ParallelTaskScheduler
     {
-        public static void  Schedule(TaskContainer container)
+        public static void Schedule(TaskContainer container)
         {
+            Guard.ArgumentNotNull(container, "container");
+
             ParallelTaskNode currTaskNode = null;
 
             currTaskNode = container.DeQueueTaskNode();
@@ -64,26 +67,48 @@ namespace ParallelTaskScheduler.Src
         {
             foreach (ITaskItem nextTask in taskNode.Tasks)
             {
-                BackgroundWorker bgWorder = new BackgroundWorker();
-
-                // use local variable in the anonynouse method or lambda expression
-                // http://www.codeproject.com/Articles/15624/Inside-C-2-0-Anonymous-Methods
-                ITaskItem localNextTask = nextTask;
-
-                bgWorder.DoWork += (object sender, DoWorkEventArgs e) =>
-                    {
-                        localNextTask.Execute();
-                    };
-
-                bgWorder.RunWorkerCompleted += (object sender, RunWorkerCompletedEventArgs e) =>
-                    {
-                        localNextTask.Complete();
-                    };
-
-                bgWorder.RunWorkerAsync();
-
-                Log.DebugFormat("task [{0}] scheduled.", localNextTask.Name);
+                if (CanBeDistributed(nextTask))
+                {
+                    LanuchRemoteTask(nextTask);
+                }
+                else
+                {
+                    LanuchLocalTask(nextTask);
+                }
             }
+        }
+
+        private static void LanuchLocalTask(ITaskItem taskItem)
+        {
+            BackgroundWorker bgWorder = new BackgroundWorker();
+
+            //// use local variable in the anonynouse method or lambda expression
+            //// http://www.codeproject.com/Articles/15624/Inside-C-2-0-Anonymous-Methods
+            //ITaskItem localNextTask = taskItem;
+
+            bgWorder.DoWork += (object sender, DoWorkEventArgs e) =>
+            {
+                taskItem.Execute();
+            };
+
+            bgWorder.RunWorkerCompleted += (object sender, RunWorkerCompletedEventArgs e) =>
+            {
+                taskItem.Complete();
+            };
+
+            bgWorder.RunWorkerAsync();
+
+            Log.DebugFormat("task [{0}] scheduled.", taskItem.Name);
+        }
+
+        private static void LanuchRemoteTask(ITaskItem taskItem)
+        {
+
+        }
+
+        private static bool CanBeDistributed(ITaskItem taskItem)
+        {
+            return taskItem.IsDistributable;
         }
 
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);

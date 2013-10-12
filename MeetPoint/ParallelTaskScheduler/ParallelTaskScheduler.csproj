@@ -56,6 +56,7 @@
     <Compile Include="Test\KeyValuePool.cs" />
     <Compile Include="Test\TaskItemImpl.cs" />
     <Compile Include="Test\TestParallelTaskScheduler.cs" />
+    <Compile Include="Util\TransferHelper.cs" />
   </ItemGroup>
   <ItemGroup>
     <Content Include="Log4Net.config">
@@ -64,6 +65,10 @@
     </Content>
   </ItemGroup>
   <ItemGroup>
+    <ProjectReference Include="..\Distributor.Service\Distributor.Service.csproj">
+      <Project>{03E5AF37-6C75-435C-9C5C-28CB046B0B39}</Project>
+      <Name>Distributor.Service</Name>
+    </ProjectReference>
     <ProjectReference Include="..\MeetPoint\MeetPoint.csproj">
       <Project>{E0556D53-4292-405C-95D7-C4AF9FF3CE6E}</Project>
       <Name>MeetPoint</Name>

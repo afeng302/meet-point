@@ -11,7 +11,13 @@ namespace ParallelTaskScheduler.Src
     {
         string Name { get; set; }
 
+        string ID { get; }
+
         bool IsDistributable { get; }
+
+        ValueType[] BoxFlyParams();
+
+        void UnboxFlyParams(ValueType[] flyParams);
 
         void Execute();
 
