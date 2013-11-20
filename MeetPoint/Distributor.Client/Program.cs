@@ -18,7 +18,7 @@ namespace Distributor.Client
             InstanceContext instanceContext = new InstanceContext(new CallbackPushTaskService());
             ILogin loginProxy = null;
             //CommunicationState state;
-
+            //MeetPoint.Src.
             //using (DuplexChannelFactory<ILogin> channelFactory = new DuplexChannelFactory<ILogin>(instanceContext, "login"))
             //{
             //    loginProxy = channelFactory.CreateChannel();

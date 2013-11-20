@@ -52,6 +52,8 @@ namespace MeetPoint.Src
 
         void PostCondArrive(object arriveContext, int number);
 
+        void Reset();
+
         event EventHandler PreCondArrived;
 
         event EventHandler PostCondArrived;

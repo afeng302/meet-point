@@ -131,6 +131,21 @@ namespace MeetPoint.Src
             this.mre.WaitOne(this.MillisecondsTimeout);
         }
 
+        public void Reset()
+        {
+            lock (this.mre)
+            {
+                // reset data
+                this.preCondArriveContextList.Clear();
+                this.PreCondArrivedCount = 0;
+                this.postArriveContextList.Clear();
+                this.PostCondArrivedCount = 0;
+
+                // reset event
+                this.mre.Reset();
+            }
+        }
+
         public event EventHandler PreCondArrived;
 
         public event EventHandler PostCondArrived;

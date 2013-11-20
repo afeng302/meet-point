@@ -3,14 +3,17 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using Distributor.Service.Src.Contract;
+using ParallelTaskScheduler.Src;
 
-namespace Distributor.Service.Src.Service
+namespace Distributor.Client
 {
     public class CallbackPushTaskService : ICallbackPushTask
     {
         public void Display(string result)
         {
-            Console.WriteLine(result);
+            Console.WriteLine("Reply from server: " + result);
+
+            RemoteTaskServer.PendRecvTask(string.Empty);
         }
     }
 }

@@ -11,5 +11,11 @@ namespace Distributor.Service.Src.Contract
     {
         [OperationContract]
         void ReportFactor(int capacityFactor);
+
+        [OperationContract]
+        void PushTask(TransferTaskItem taskItem);
+
+        [OperationContract]
+        TransferTaskItem PullTask(string taskID);
     }
 }

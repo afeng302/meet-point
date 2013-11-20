@@ -28,7 +28,7 @@ namespace ParallelTaskScheduler.Test
             set;
         }
 
-        public string ID { get; private set; }
+        public string ID { get; set; }
 
         public bool IsDistributable { get; private set; }
 
@@ -62,6 +62,30 @@ namespace ParallelTaskScheduler.Test
         }
 
         public void UnboxFlyParams(ValueType[] flyParams)
+        {
+            throw new NotImplementedException();
+        }
+
+
+        public Distributor.Service.Src.Contract.TaskStatus Status
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
+        }
+
+
+        public string[] BoxFlyFiles()
+        {
+            throw new NotImplementedException();
+        }
+
+        public void UnboxFlyFiles(string[] flyFiles)
         {
             throw new NotImplementedException();
         }

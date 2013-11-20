@@ -202,5 +202,83 @@ namespace MeetPoint.Test
             MeetPointFactory.Cleanup();
             Assert.AreEqual(pointCount, MeetPointFactory.MeetPointCount);
         }
+
+        [Test]
+        public void MeetPointResetTest()
+        {
+            bool createdNew = false;
+            string pointID = Guid.NewGuid().ToString();
+            IMeetPoint meetPoint = MeetPointFactory.Create(pointID, 3, 1, out createdNew);
+
+            PreCondTask preTask1 = new PreCondTask(meetPoint, 2);
+            PreCondTask preTask2 = new PreCondTask(meetPoint, 1);
+            PostCondTask postTask1 = new PostCondTask(meetPoint, 1);
+            Assert.IsTrue(meetPoint.IsBlocked);
+            Assert.IsTrue(preTask1.IsBlocked);
+            Assert.IsTrue(preTask2.IsBlocked);
+            Assert.IsTrue(postTask1.IsBlocked);
+
+            preTask1.RunAsync();
+            Assert.IsTrue(preTask1.WaitArrive(1000));
+            Assert.IsTrue(meetPoint.IsBlocked);
+
+            Assert.IsTrue(preTask1.IsBlocked);
+            Assert.IsTrue(preTask2.IsBlocked);
+            Assert.IsTrue(postTask1.IsBlocked);
+
+            preTask2.RunAsync();
+            Assert.IsTrue(preTask2.WaitArrive(1000));
+            Assert.IsFalse(meetPoint.IsBlocked);
+
+            Assert.IsTrue(preTask1.WaitTaskUnblock(1000));
+            Assert.IsFalse(preTask1.IsBlocked);
+
+            Assert.IsTrue(preTask2.WaitTaskUnblock(1000));
+            Assert.IsFalse(preTask2.IsBlocked);
+
+            Assert.IsTrue(postTask1.IsBlocked);
+
+            postTask1.RunAsync();
+            Assert.IsTrue(postTask1.WaitArrive(1000));
+            Assert.IsTrue(postTask1.WaitTaskUnblock(1000));
+            Assert.IsFalse(postTask1.IsBlocked);
+
+            // reset, run the test task again
+            meetPoint.Reset();
+            Assert.IsTrue(meetPoint.IsBlocked);
+
+            preTask1 = new PreCondTask(meetPoint, 2);
+            preTask2 = new PreCondTask(meetPoint, 1);
+            postTask1 = new PostCondTask(meetPoint, 1);
+            Assert.IsTrue(meetPoint.IsBlocked);
+            Assert.IsTrue(preTask1.IsBlocked);
+            Assert.IsTrue(preTask2.IsBlocked);
+            Assert.IsTrue(postTask1.IsBlocked);
+
+            preTask1.RunAsync();
+            Assert.IsTrue(preTask1.WaitArrive(1000));
+            Assert.IsTrue(meetPoint.IsBlocked);
+
+            Assert.IsTrue(preTask1.IsBlocked);
+            Assert.IsTrue(preTask2.IsBlocked);
+            Assert.IsTrue(postTask1.IsBlocked);
+
+            preTask2.RunAsync();
+            Assert.IsTrue(preTask2.WaitArrive(1000));
+            Assert.IsFalse(meetPoint.IsBlocked);
+
+            Assert.IsTrue(preTask1.WaitTaskUnblock(1000));
+            Assert.IsFalse(preTask1.IsBlocked);
+
+            Assert.IsTrue(preTask2.WaitTaskUnblock(1000));
+            Assert.IsFalse(preTask2.IsBlocked);
+
+            Assert.IsTrue(postTask1.IsBlocked);
+
+            postTask1.RunAsync();
+            Assert.IsTrue(postTask1.WaitArrive(1000));
+            Assert.IsTrue(postTask1.WaitTaskUnblock(1000));
+            Assert.IsFalse(postTask1.IsBlocked);
+        }
     }
 }

@@ -12,5 +12,15 @@ namespace Distributor.Service.Src.Service
         {
             throw new NotImplementedException();
         }
+
+        public void PushTask(TransferTaskItem taskItem)
+        {
+            throw new NotImplementedException();
+        }
+
+        public TransferTaskItem PullTask(string taskID)
+        {
+            throw new NotImplementedException();
+        }
     }
 }

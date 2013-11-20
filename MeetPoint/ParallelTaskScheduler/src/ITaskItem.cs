@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Distributor.Service.Src.Contract;
 
 namespace ParallelTaskScheduler.Src
 {
@@ -11,13 +12,19 @@ namespace ParallelTaskScheduler.Src
     {
         string Name { get; set; }
 
-        string ID { get; }
+        string ID { get; set; }
 
         bool IsDistributable { get; }
+
+        TaskStatus Status { get; set; }
 
         ValueType[] BoxFlyParams();
 
         void UnboxFlyParams(ValueType[] flyParams);
+
+        string[] BoxFlyFiles();
+
+        void UnboxFlyFiles(string[] flyFiles);
 
         void Execute();
 

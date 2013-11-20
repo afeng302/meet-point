@@ -8,11 +8,15 @@ using System.ComponentModel;
 using log4net;
 using System.Reflection;
 using Distributor.Service.Src.Util;
+using ParallelTaskScheduler.Util;
+using Distributor.Service.Src.Contract;
 
 namespace ParallelTaskScheduler.Src
 {
     public static class ParallelTaskScheduler
     {
+        private static Dictionary<string, ITaskItem> DISTRIBUTED_TASK_MAP = new Dictionary<string, ITaskItem>();
+
         public static void Schedule(TaskContainer container)
         {
             Guard.ArgumentNotNull(container, "container");
@@ -36,6 +40,21 @@ namespace ParallelTaskScheduler.Src
                 // move to next task node
                 currTaskNode = container.DeQueueTaskNode();
             } while (currTaskNode != null);
+        }
+
+        public static ITaskItem GetDistributedTask(string taskID)
+        {
+            Guard.ArgumentNotNullOrEmpty(taskID, "taskID");
+
+            lock (DISTRIBUTED_TASK_MAP)
+            {
+                if (DISTRIBUTED_TASK_MAP.ContainsKey(taskID))
+                {
+                    return DISTRIBUTED_TASK_MAP[taskID];
+                }
+
+                return null;
+            }
         }
 
         private static IMeetPoint AssignMeetPoint(ParallelTaskNode taskNode)
@@ -93,21 +112,74 @@ namespace ParallelTaskScheduler.Src
 
             bgWorder.RunWorkerCompleted += (object sender, RunWorkerCompletedEventArgs e) =>
             {
+                if (e.Error != null)
+                {
+                    Log.ErrorFormat("local task execution error. Message[{0}]\r\nStackTrace[{1}]",
+                        e.Error.Message, e.Error.StackTrace);
+                }
                 taskItem.Complete();
             };
 
             bgWorder.RunWorkerAsync();
 
-            Log.DebugFormat("task [{0}] scheduled.", taskItem.Name);
+            Log.DebugFormat("task [{0}] scheduled (locally).", taskItem.Name);
         }
 
         private static void LanuchRemoteTask(ITaskItem taskItem)
         {
+            BackgroundWorker bgWorder = new BackgroundWorker();
 
+            bgWorder.DoWork += (object sender, DoWorkEventArgs e) =>
+            {
+                // add to pending map
+                lock (DISTRIBUTED_TASK_MAP)
+                {
+                    DISTRIBUTED_TASK_MAP.Add(taskItem.ID, taskItem);
+                }
+
+                // box the task
+                TransferTaskItem sendTask = TransferHelper.BoxTask(taskItem);
+
+                // transfer to master node
+                RemoteTaskServer.PendSendTask(sendTask);
+
+                // create meet point for sync - wait for remote response
+                bool createdNew;
+                IMeetPoint meetPoint = MeetPointFactory.Create(taskItem.ID, out createdNew);
+                meetPoint.PostCondArrive(null);
+            };
+
+            bgWorder.RunWorkerCompleted += (object sender, RunWorkerCompletedEventArgs e) =>
+            {
+                if (e.Error != null)
+                {
+                    Log.ErrorFormat("remote task execution error. Message[{0}]\r\nStackTrace[{1}]",
+                        e.Error.Message, e.Error.StackTrace);
+                }
+
+                // complate task
+                taskItem.Complete();
+                
+                // remove from pending map
+                lock (DISTRIBUTED_TASK_MAP)
+                {
+                    DISTRIBUTED_TASK_MAP.Remove(taskItem.ID);
+                }
+            };
+
+            bgWorder.RunWorkerAsync();
+
+            Log.DebugFormat("task [{0}] scheduled (remotely).", taskItem.Name);
         }
 
         private static bool CanBeDistributed(ITaskItem taskItem)
         {
+            // local node is idle?
+
+            // ask for most powerful node
+
+            // if it is not myself?
+
             return taskItem.IsDistributable;
         }
 

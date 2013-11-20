@@ -11,7 +11,8 @@
     <RootNamespace>Distributor.Host</RootNamespace>
     <AssemblyName>Distributor.Host</AssemblyName>
     <TargetFrameworkVersion>v4.0</TargetFrameworkVersion>
-    <TargetFrameworkProfile>Client</TargetFrameworkProfile>
+    <TargetFrameworkProfile>
+    </TargetFrameworkProfile>
     <FileAlignment>512</FileAlignment>
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|x86' ">
@@ -51,6 +52,10 @@
     <ProjectReference Include="..\Distributor.Service\Distributor.Service.csproj">
       <Project>{03E5AF37-6C75-435C-9C5C-28CB046B0B39}</Project>
       <Name>Distributor.Service</Name>
+    </ProjectReference>
+    <ProjectReference Include="..\ParallelTaskScheduler\ParallelTaskScheduler.csproj">
+      <Project>{D2536D64-ECAB-4C19-9BD3-5E458A26F16D}</Project>
+      <Name>ParallelTaskScheduler</Name>
     </ProjectReference>
   </ItemGroup>
   <ItemGroup>
