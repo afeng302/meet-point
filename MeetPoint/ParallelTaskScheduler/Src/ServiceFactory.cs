@@ -13,9 +13,9 @@ namespace ParallelTaskScheduler.Src
 
         public static string FileRepoServiceEndpointName { get; set; }
 
-        public static ICapacityFactor GetTaskService()
+        public static ITaskScheduleService GetTaskService()
         {
-            return ServiceProxyFactory.Create<ICapacityFactor>(TaskServiceEndpointName);
+            return ServiceProxyFactory.Create<ITaskScheduleService>(TaskServiceEndpointName);
         }
 
         public static IFileRepositoryService GetFileRepoService()

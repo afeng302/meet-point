@@ -6,7 +6,7 @@ using Distributor.Service.Src.Contract;
 
 namespace Distributor.Service.Src.Service
 {
-    public class CapacityFactorService : ICapacityFactor
+    public class CapacityFactorService : ITaskScheduleService
     {
         public void ReportFactor(int capacityFactor)
         {

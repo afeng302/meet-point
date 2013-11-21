@@ -7,7 +7,7 @@ using System.ServiceModel;
 namespace Distributor.Service.Src.Contract
 {
     [ServiceContract]
-    public interface ICapacityFactor
+    public interface ITaskScheduleService
     {
         [OperationContract]
         void ReportFactor(int capacityFactor);
