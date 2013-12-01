@@ -33,6 +33,9 @@ namespace Distributor.Service.Src.Service
                 this.transferTaskMap[taskItem.ID] = taskItem;
                 Log.InfoFormat("task was pushed successfully [{0}]", taskItem.ID);
             }
+
+            // inform the receiver 
+
         }
 
         public TransferTaskItem PullTask(string taskID)
