@@ -31,6 +31,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="log4net">
+      <HintPath>..\lib\log4net.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.ServiceModel" />
@@ -51,7 +54,7 @@
     <Compile Include="Src\Contract\StorageFileInfo.cs" />
     <Compile Include="Src\Service\FileRepositoryService.cs" />
     <Compile Include="Src\Service\LoginService.cs" />
-    <Compile Include="Src\Service\CapacityFactorService.cs" />
+    <Compile Include="Src\Service\TaskScheduleService.cs" />
     <Compile Include="Src\Util\PushTaskExecutor.cs" />
     <Compile Include="Src\Util\ServiceProxy\ChannelFactoryCreator.cs" />
     <Compile Include="Src\Util\Guard.cs" />

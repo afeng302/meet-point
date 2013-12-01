@@ -9,18 +9,18 @@ namespace ParallelTaskScheduler.Src
 {
     static class ServiceFactory
     {
-        public static string TaskServiceEndpointName { get; set; }
+        public static string ENTaskScheduleService { get; set; }
 
-        public static string FileRepoServiceEndpointName { get; set; }
+        public static string ENFileRepoService { get; set; }
 
         public static ITaskScheduleService GetTaskService()
         {
-            return ServiceProxyFactory.Create<ITaskScheduleService>(TaskServiceEndpointName);
+            return ServiceProxyFactory.Create<ITaskScheduleService>(ENTaskScheduleService);
         }
 
         public static IFileRepositoryService GetFileRepoService()
         {
-            return ServiceProxyFactory.Create<IFileRepositoryService>(FileRepoServiceEndpointName);
+            return ServiceProxyFactory.Create<IFileRepositoryService>(ENFileRepoService);
         }
     }
 }

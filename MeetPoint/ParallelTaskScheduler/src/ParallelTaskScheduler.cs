@@ -157,7 +157,7 @@ namespace ParallelTaskScheduler.Src
                         e.Error.Message, e.Error.StackTrace);
                 }
 
-                // complate task
+                // complete task
                 taskItem.Complete();
                 
                 // remove from pending map
