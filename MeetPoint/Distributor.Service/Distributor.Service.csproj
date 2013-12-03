@@ -52,9 +52,11 @@
     <Compile Include="Src\Contract\ITaskScheduleService.cs" />
     <Compile Include="Src\Contract\TransferTaskItem.cs" />
     <Compile Include="Src\Contract\StorageFileInfo.cs" />
+    <Compile Include="Src\Manager\PayloadManager.cs" />
     <Compile Include="Src\Service\FileRepositoryService.cs" />
     <Compile Include="Src\Service\LoginService.cs" />
     <Compile Include="Src\Service\TaskScheduleService.cs" />
+    <Compile Include="Src\Manager\CallbackChannelManager.cs" />
     <Compile Include="Src\Util\PushTaskExecutor.cs" />
     <Compile Include="Src\Util\ServiceProxy\ChannelFactoryCreator.cs" />
     <Compile Include="Src\Util\Guard.cs" />

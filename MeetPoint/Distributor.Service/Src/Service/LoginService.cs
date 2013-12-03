@@ -7,6 +7,7 @@ using System.ServiceModel;
 using Distributor.Service.Src.Util;
 using log4net;
 using System.Reflection;
+using Distributor.Service.Src.Manager;
 
 namespace Distributor.Service.Src.Service
 {
@@ -26,9 +27,10 @@ namespace Distributor.Service.Src.Service
             this.callback = OperationContext.Current.GetCallbackChannel<ICallbackPushTask>();
 
             // add callback channel
-            PushTaskExecutor.AddCallbackChannel(this.clientHostName, this.callback);
+            CallbackChannelManager.AddCallbackChannel(this.clientHostName, this.callback);
 
-            //callback.Display("Send result from server.");
+            // callback.Display("Send result from server.");
+            // test code
             PushTaskExecutor.AddTask(callback);
 
             (callback as ICommunicationObject).Closed += new EventHandler(LoginService_Closed);

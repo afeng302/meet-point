@@ -125,12 +125,15 @@ namespace ParallelTaskScheduler.Src
             Log.DebugFormat("task [{0}] scheduled (locally).", taskItem.Name);
         }
 
-        private static void LanuchRemoteTask(ITaskItem taskItem)
+        public static void LanuchRemoteTask(ITaskItem taskItem)
         {
             BackgroundWorker bgWorder = new BackgroundWorker();
 
             bgWorder.DoWork += (object sender, DoWorkEventArgs e) =>
             {
+                // get target node
+
+
                 // add to pending map
                 lock (DISTRIBUTED_TASK_MAP)
                 {
