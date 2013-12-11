@@ -8,6 +8,8 @@ using Distributor.Service.Src.Util;
 using Distributor.Service.Src.Service;
 using System.IO;
 using System.Diagnostics;
+using ParallelTaskScheduler.Src;
+using Distributor.Client.Task;
 
 namespace Distributor.Client
 {
@@ -16,7 +18,7 @@ namespace Distributor.Client
         static void Main(string[] args)
         {
             InstanceContext instanceContext = new InstanceContext(new CallbackPushTaskService());
-            ILogin loginProxy = null;
+            ILogin loginProxy = null; 
             //CommunicationState state;
             //MeetPoint.Src.
             //using (DuplexChannelFactory<ILogin> channelFactory = new DuplexChannelFactory<ILogin>(instanceContext, "login"))
@@ -33,10 +35,40 @@ namespace Distributor.Client
 
             //ILogin loginProxy = ServiceProxyFactory.Create<ILogin>("login");
 
+            //
+            // Login
             loginProxy = ServiceProxyFactory.Create<ILogin>(instanceContext, "LoginService", "net.tcp://localhost:1234/login");
+            loginProxy.Login("client-01");
 
-            loginProxy.Login("test login");
+            //
+            // init service factory
+            ServiceFactory.ENFileRepoService = "FileRepositoryService";
+            ServiceFactory.ENTaskScheduleService = "TaskScheduleService";
+            
+            //
+            // set local host name
+            ParallelTaskScheduler.Src.ParallelTaskScheduler.LocalHostName = "client-01";
 
+            //
+            // start remote task server
+            RemoteTaskServer.Start();
+
+            //
+            // schedule task
+            TaskContainer container = new TaskContainer().AddOrdered(new ReadRadio())
+                .AddOrdered(new PrepareData()).AddOrdered(new WriteRadio());
+            ParallelTaskScheduler.Src.ParallelTaskScheduler.Schedule(container);
+            
+            Console.ReadLine();
+
+            //ILogin loginProxy = new ChannelFactory<ILogin>("login").CreateChannel();
+
+
+            //loginProxy.Login("test login");
+        }
+
+        static void FileRepoServiceTest()
+        {
             IFileRepositoryService repoService = ServiceProxyFactory.Create<IFileRepositoryService>("FileRepositoryService");
 
             using (FileStream uploadStream1 = new FileStream("D:/test_data/iTM_Help_en.chm", FileMode.Open),
@@ -78,12 +110,6 @@ namespace Distributor.Client
                 // delete file
                 repoService.DeleteFile("./rpk/MR5.13.3_NonE2E_Clear_FW7893_R01011100.new.rpk");
             }
-            Console.ReadLine();
-
-            //ILogin loginProxy = new ChannelFactory<ILogin>("login").CreateChannel();
-
-
-            //loginProxy.Login("test login");
         }
     }
 }

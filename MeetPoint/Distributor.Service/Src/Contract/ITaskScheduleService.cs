@@ -17,5 +17,8 @@ namespace Distributor.Service.Src.Contract
 
         [OperationContract]
         TransferTaskItem PullTask(string taskID);
+
+        [OperationContract]
+        string GetRelaxedNode();
     }
 }

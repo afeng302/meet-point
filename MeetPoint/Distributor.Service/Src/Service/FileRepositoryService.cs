@@ -6,6 +6,7 @@ using Distributor.Service.Src.Contract;
 using System.ServiceModel;
 using System.IO;
 using System.Reflection;
+using log4net;
 
 namespace Distributor.Service.Src.Service
 {
@@ -32,8 +33,11 @@ namespace Distributor.Service.Src.Service
 
             if (!File.Exists(filePath))
             {
+                Log.ErrorFormat("File was not found. [{0}]", filePath);
                 throw new FileNotFoundException("File was not found", Path.GetFileName(filePath));
             }
+
+            Log.InfoFormat("Getting file stream ... [{0}]", filePath);
 
             return new FileStream(filePath, FileMode.Open, FileAccess.Read);
         }
@@ -51,10 +55,14 @@ namespace Distributor.Service.Src.Service
                 Directory.CreateDirectory(dir);
             }
 
+            Log.InfoFormat("Putting file ... [{0}]", filePath);
+
             using (var outputStream = new FileStream(filePath, FileMode.Create))
             {
                 msg.DataStream.CopyTo(outputStream);
             }
+
+            Log.InfoFormat("Put file [{0}]", filePath);
         }
 
         /// <summary>
@@ -68,6 +76,8 @@ namespace Distributor.Service.Src.Service
             {
                 File.Delete(filePath);
             }
+
+            Log.InfoFormat("file deleted [{0}]", filePath);
         }
 
         /// <summary>
@@ -97,12 +107,15 @@ namespace Distributor.Service.Src.Service
             // if the folder does not exist, return null
             if (!Directory.Exists(basePath))
             {
+                Log.ErrorFormat("folder does not exist [{0}]", basePath);
                 return null;
             }
 
             // return the files in the specific folder
             DirectoryInfo dirInfo = new DirectoryInfo(basePath);
             FileInfo[] files = dirInfo.GetFiles("*.*", SearchOption.AllDirectories);
+
+            Log.InfoFormat("getting file info ... [{0}]", virtualPath);
 
             return (from f in files
                     select new StorageFileInfo()
@@ -111,5 +124,7 @@ namespace Distributor.Service.Src.Service
                         VirtualPath = f.FullName.Substring(f.FullName.IndexOf(RepositoryDirectory) + RepositoryDirectory.Length + 1)
                     }).ToArray();
         }
+
+        private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
     }
 }

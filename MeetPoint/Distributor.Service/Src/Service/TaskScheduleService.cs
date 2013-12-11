@@ -77,6 +77,11 @@ namespace Distributor.Service.Src.Service
             return taskItem;
         }
 
+        public string GetRelaxedNode()
+        {
+            return PayloadManager.GetRelaxedNode();
+        }
+
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
     }
 }

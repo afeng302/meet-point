@@ -29,8 +29,11 @@ namespace Distributor.Service.Src.Service
             // add callback channel
             CallbackChannelManager.AddCallbackChannel(this.clientHostName, this.callback);
 
+            // add payload
+            PayloadManager.AddNode(this.clientHostName);
+
             // callback.Display("Send result from server.");
-            // test code
+            // *** test code ***
             PushTaskExecutor.AddTask(callback);
 
             (callback as ICommunicationObject).Closed += new EventHandler(LoginService_Closed);
@@ -42,6 +45,9 @@ namespace Distributor.Service.Src.Service
             Console.WriteLine(clientHostName + " Faulted !!!");
             PushTaskExecutor.RemoveTask(this.callback);
 
+            CallbackChannelManager.RemoveCallbackChannel(this.clientHostName);
+            PayloadManager.RemoveNode(this.clientHostName);
+
             Log.ErrorFormat("channel to [{0}] is faulted.", this.clientHostName);
         }
 
@@ -49,6 +55,9 @@ namespace Distributor.Service.Src.Service
         {
             Console.WriteLine(clientHostName + " Closed !!!");
             PushTaskExecutor.RemoveTask(this.callback);
+
+            CallbackChannelManager.RemoveCallbackChannel(this.clientHostName);
+            PayloadManager.RemoveNode(this.clientHostName);
 
             Log.InfoFormat("channel to [{0}] is closed.", this.clientHostName);
         }

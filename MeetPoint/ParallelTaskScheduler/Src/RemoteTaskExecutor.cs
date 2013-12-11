@@ -50,7 +50,18 @@ namespace ParallelTaskScheduler.Src
             ITaskItem requTaskItem = TransferHelper.UnboxTask(requTask);
 
             // execute task
-            requTaskItem.Execute();
+            requTaskItem.ExecuteType = TaskExecuteType.Remotely;
+            requTaskItem.Status = TaskStatus.Running;
+            try
+            {
+                requTaskItem.Execute();
+            }
+            catch (Exception e)
+            {
+                Log.ErrorFormat("requTaskItem.Execute() error. [{0}]", e.Message);
+                requTask.Status = TaskStatus.Aborted;
+            }
+            
 
             // box the task
             TransferTaskItem respTask = TransferHelper.BoxTask(requTaskItem);
@@ -59,6 +70,7 @@ namespace ParallelTaskScheduler.Src
             respTask.Status = requTaskItem.Status;
             respTask.DestNode = requTask.SrcNode;
             respTask.SrcNode = requTask.DestNode;
+            respTask.TaskTransferType = TransferType.Response;
 
             // send out result
             RemoteTaskServer.PendSendTask(respTask);

@@ -18,6 +18,8 @@ namespace ParallelTaskScheduler.Src
 
         TaskStatus Status { get; set; }
 
+        TaskExecuteType ExecuteType { get; set; }
+
         ValueType[] BoxFlyParams();
 
         void UnboxFlyParams(ValueType[] flyParams);
@@ -31,5 +33,7 @@ namespace ParallelTaskScheduler.Src
         void Complete();
 
         event EventHandler TaskCompleted;
+
+        TaskContainer OwnContainer { get; set; }
     }
 }

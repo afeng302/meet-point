@@ -7,7 +7,7 @@ using Distributor.Service.Src.Util;
 
 namespace ParallelTaskScheduler.Src
 {
-    static class ServiceFactory
+    public static class ServiceFactory
     {
         public static string ENTaskScheduleService { get; set; }
 

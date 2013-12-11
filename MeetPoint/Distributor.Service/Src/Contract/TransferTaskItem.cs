@@ -23,6 +23,13 @@ namespace Distributor.Service.Src.Contract
         Timeout
     }
 
+    public enum TaskExecuteType
+    {
+        Unkown,
+        Locally,
+        Remotely
+    }
+
     [Serializable]
     public class TransferTaskItem
     {

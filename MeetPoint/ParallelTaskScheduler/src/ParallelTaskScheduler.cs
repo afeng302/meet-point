@@ -17,6 +17,12 @@ namespace ParallelTaskScheduler.Src
     {
         private static Dictionary<string, ITaskItem> DISTRIBUTED_TASK_MAP = new Dictionary<string, ITaskItem>();
 
+        public static string LocalHostName
+        {
+            get;
+            set;
+        }
+
         public static void Schedule(TaskContainer container)
         {
             Guard.ArgumentNotNull(container, "container");
@@ -107,6 +113,9 @@ namespace ParallelTaskScheduler.Src
 
             bgWorder.DoWork += (object sender, DoWorkEventArgs e) =>
             {
+                // set execute type
+                taskItem.ExecuteType = TaskExecuteType.Locally;
+                taskItem.Status = TaskStatus.Running;
                 taskItem.Execute();
             };
 
@@ -116,7 +125,13 @@ namespace ParallelTaskScheduler.Src
                 {
                     Log.ErrorFormat("local task execution error. Message[{0}]\r\nStackTrace[{1}]",
                         e.Error.Message, e.Error.StackTrace);
+                    taskItem.Status = TaskStatus.Aborted;
                 }
+                else
+                {
+                    taskItem.Status = TaskStatus.Completed;
+                }
+                
                 taskItem.Complete();
             };
 
@@ -131,8 +146,11 @@ namespace ParallelTaskScheduler.Src
 
             bgWorder.DoWork += (object sender, DoWorkEventArgs e) =>
             {
-                // get target node
+                // set execute type
+                taskItem.ExecuteType = TaskExecuteType.Remotely;
 
+                // get target node
+                string destHostName = ServiceFactory.GetTaskService().GetRelaxedNode();
 
                 // add to pending map
                 lock (DISTRIBUTED_TASK_MAP)
@@ -142,6 +160,13 @@ namespace ParallelTaskScheduler.Src
 
                 // box the task
                 TransferTaskItem sendTask = TransferHelper.BoxTask(taskItem);
+
+                // set host name
+                sendTask.DestNode = destHostName;
+                sendTask.SrcNode = LocalHostName;
+
+                // set task type to request
+                sendTask.TaskTransferType = TransferType.Request;
 
                 // transfer to master node
                 RemoteTaskServer.PendSendTask(sendTask);

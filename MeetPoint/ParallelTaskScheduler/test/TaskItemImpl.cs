@@ -32,6 +32,10 @@ namespace ParallelTaskScheduler.Test
 
         public bool IsDistributable { get; private set; }
 
+        public void PreExecute()
+        {
+        }
+
         public void Execute()
         {
             Log.DebugFormat("task [{0}] is Executing.", this.Name);
@@ -41,6 +45,10 @@ namespace ParallelTaskScheduler.Test
             KeyValuePool.Set(this.GetHashCode().ToString(), new Result() { TimeStamp = DateTime.Now, Value = this.value });
 
             Log.DebugFormat("task [{0}] is completed.", this.Name);
+        }
+
+        public void PostExecute()
+        {
         }
 
         public void Complete()
@@ -88,6 +96,26 @@ namespace ParallelTaskScheduler.Test
         public void UnboxFlyFiles(string[] flyFiles)
         {
             throw new NotImplementedException();
+        }
+
+
+        public TaskContainer OwnContainer
+        {
+            get;
+            set;
+        }
+
+
+        public Distributor.Service.Src.Contract.TaskExecuteType ExecuteType
+        {
+            get
+            {
+                throw new NotImplementedException();
+            }
+            set
+            {
+                throw new NotImplementedException();
+            }
         }
     }
 }

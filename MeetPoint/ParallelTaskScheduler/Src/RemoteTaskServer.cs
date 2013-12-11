@@ -37,6 +37,8 @@ namespace ParallelTaskScheduler.Src
             SEND_WORKER.DoWork += new DoWorkEventHandler(SEND_WORKER_DoWork);
             SEND_WORKER.RunWorkerCompleted += new RunWorkerCompletedEventHandler(SEND_WORKER_RunWorkerCompleted);
 
+            createdNew = false;
+            SEND_MEET_POINT = MeetPointFactory.Create(Guid.NewGuid().ToString(), 1, 1, out createdNew);
         }
 
         public static string MasterNodeName { get; set; }
@@ -44,11 +46,13 @@ namespace ParallelTaskScheduler.Src
         public static void Start()
         {
             RECV_WORKER.RunWorkerAsync();
+            SEND_WORKER.RunWorkerAsync();
         }
 
         public static void Stop()
         {
             RECV_WORKER.CancelAsync();
+            SEND_WORKER.CancelAsync();
         }
 
         public static void PendRecvTask(string taskID)
@@ -173,10 +177,7 @@ namespace ParallelTaskScheduler.Src
                     }
                 }
 
-                // send task to master node
-                ServiceFactory.GetTaskService().PushTask(sendTask);
-                Log.InfoFormat("pushed task: [{0}]", sendTask.ID);
-
+                // we should send files before send task, after task send, receiver will be informed.
                 // send files for the task
                 if (sendTask.Files != null)
                 {
@@ -186,14 +187,18 @@ namespace ParallelTaskScheduler.Src
                         using (FileStream uploadStream = new FileStream(filePath, FileMode.Open))
                         {
                             ServiceFactory.GetFileRepoService().PutFile(new FileUploadMessage()
-                                {
-                                    DataStream = uploadStream,
-                                    VirtualPath = nextFile,
-                                });
+                            {
+                                DataStream = uploadStream,
+                                VirtualPath = nextFile,
+                            });
                         }
                         Log.InfoFormat("put file: [{0}]", nextFile);
                     }
                 }
+
+                // send task to master node
+                ServiceFactory.GetTaskService().PushTask(sendTask);
+                Log.InfoFormat("pushed task: [{0}]", sendTask.ID);
             } while (true);
         }
 

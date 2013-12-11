@@ -26,7 +26,8 @@ namespace Distributor.Service.Src.Manager
 
                 PAYLOAD_MAP[hostName] = 0;
             }
-           
+
+            Log.InfoFormat("[{0}] was added into payload map", hostName);
         }
 
         public static void RemoveNode(string hostName)
@@ -40,6 +41,8 @@ namespace Distributor.Service.Src.Manager
                     Log.ErrorFormat("host[{0}] cannot be found in payload map", hostName);
                 }
             }
+
+            Log.InfoFormat("[{0}] was removed from payload map", hostName);
         }
 
         public static void IncreasePayload(string hostName)
@@ -56,6 +59,8 @@ namespace Distributor.Service.Src.Manager
 
                 PAYLOAD_MAP[hostName]++;
             }
+
+            Log.InfoFormat("payload on [{0}] was increased", hostName);
         }
 
         public static void ReducePayload(string hostName)
@@ -79,6 +84,8 @@ namespace Distributor.Service.Src.Manager
                     PAYLOAD_MAP[hostName] = 0;
                 }
             }
+
+            Log.InfoFormat("payload on [{0}] was reduced", hostName);
         }
 
         public static string GetRelaxedNode()
