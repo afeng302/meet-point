@@ -53,6 +53,7 @@
     <Compile Include="Src\Contract\TransferTaskItem.cs" />
     <Compile Include="Src\Contract\StorageFileInfo.cs" />
     <Compile Include="Src\Manager\PayloadManager.cs" />
+    <Compile Include="Src\Manager\TransferTaskManager.cs" />
     <Compile Include="Src\Service\FileRepositoryService.cs" />
     <Compile Include="Src\Service\LoginService.cs" />
     <Compile Include="Src\Service\TaskScheduleService.cs" />

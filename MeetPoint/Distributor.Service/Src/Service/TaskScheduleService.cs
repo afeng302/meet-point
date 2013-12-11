@@ -12,8 +12,6 @@ namespace Distributor.Service.Src.Service
 {
     public class TaskScheduleService : ITaskScheduleService
     {
-        private Dictionary<string, TransferTaskItem> transferTaskMap = new Dictionary<string, TransferTaskItem>();
-
         public void ReportFactor(int capacityFactor)
         {
             throw new NotImplementedException();
@@ -23,17 +21,10 @@ namespace Distributor.Service.Src.Service
         {
             Guard.ArgumentNotNull(taskItem, "taskItem");
 
-            lock (this.transferTaskMap)
-            {
-                if (this.transferTaskMap.ContainsKey(taskItem.ID))
-                {
-                    Log.ErrorFormat("duplicate task [{0}]", taskItem.ID);
-                    return;
-                }
+            // add task
+            TransferTaskManager.AddTask(taskItem);
 
-                this.transferTaskMap[taskItem.ID] = taskItem;
-                Log.InfoFormat("task was pushed successfully [{0}]", taskItem.ID);
-            }
+            Log.InfoFormat("task was pushed successfully [{0}]", taskItem.ID);
 
             // inform the receiver 
             ICallbackPushTask callback = CallbackChannelManager.GetCallbackChannel(taskItem.DestNode);
@@ -58,21 +49,13 @@ namespace Distributor.Service.Src.Service
         {
             Guard.ArgumentNotNullOrEmpty(taskID, "taskID");
 
-            TransferTaskItem taskItem = null;
+            // get task
+            TransferTaskItem taskItem = TransferTaskManager.GetTask(taskID);
+            Log.InfoFormat("task was pulled [{0}]", taskID);
 
-            lock (this.transferTaskMap)
-            {
-                if (!this.transferTaskMap.ContainsKey(taskID))
-                {
-                    Log.ErrorFormat("task not found [{0}]", taskID);
-                    return null;
-                }
-
-                taskItem = this.transferTaskMap[taskID];
-
-                this.transferTaskMap.Remove(taskID);
-                Log.InfoFormat("task was pulled and deleted from master node [{0}]", taskID);
-            }
+            // remove task
+            TransferTaskManager.RemoveTask(taskID);
+            Log.InfoFormat("task was deleted from master node [{0}]", taskID);
 
             return taskItem;
         }

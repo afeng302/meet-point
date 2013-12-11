@@ -61,7 +61,9 @@ namespace ParallelTaskScheduler.Src
                 Log.ErrorFormat("requTaskItem.Execute() error. [{0}]", e.Message);
                 requTask.Status = TaskStatus.Aborted;
             }
-            
+
+            // set the task status
+            requTaskItem.Status = TaskStatus.Completed;
 
             // box the task
             TransferTaskItem respTask = TransferHelper.BoxTask(requTaskItem);

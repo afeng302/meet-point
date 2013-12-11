@@ -9,7 +9,8 @@ using Distributor.Service.Src.Service;
 using System.IO;
 using System.Diagnostics;
 using ParallelTaskScheduler.Src;
-using Distributor.Client.Task;
+using Distributor.TestUtil.Task;
+using ParallelTaskScheduler.Src.TaskFactory;
 
 namespace Distributor.Client
 {
@@ -48,6 +49,10 @@ namespace Distributor.Client
             //
             // set local host name
             ParallelTaskScheduler.Src.ParallelTaskScheduler.LocalHostName = "client-01";
+
+            //
+            // init task factory
+            TaskFactoryRender.SetFactory(new TaskFactoryImpl());
 
             //
             // start remote task server

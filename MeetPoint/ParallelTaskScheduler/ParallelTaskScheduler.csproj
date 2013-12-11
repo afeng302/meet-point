@@ -57,6 +57,8 @@
     <Compile Include="Src\TaskContainer.cs" />
     <Compile Include="Src\ParallelTaskNode.cs" />
     <Compile Include="Src\ParallelTaskScheduler.cs" />
+    <Compile Include="Src\TaskFactory\ITaskFactory.cs" />
+    <Compile Include="Src\TaskFactory\TaskFactoryRender.cs" />
     <Compile Include="Test\KeyValuePool.cs" />
     <Compile Include="Test\TaskItemImpl.cs" />
     <Compile Include="Test\TestParallelTaskScheduler.cs" />

@@ -124,6 +124,12 @@ namespace ParallelTaskScheduler.Src
                         // get file
                         Stream srcStream = ServiceFactory.GetFileRepoService().GetFile(nextFile);
                         string filePath = Path.GetFullPath(Path.Combine(TransferHelper.LocalRootPath, nextFile));
+                        string dir = Path.GetDirectoryName(filePath);
+                        if (!Directory.Exists(dir))
+                        {
+                            Directory.CreateDirectory(dir);
+                        }
+
                         using (FileStream destStream = new FileStream(filePath, FileMode.Create))
                         {
                             srcStream.CopyTo(destStream);

@@ -92,6 +92,8 @@ namespace ParallelTaskScheduler.Src
         {
             foreach (ITaskItem nextTask in taskNode.Tasks)
             {
+                nextTask.Status = TaskStatus.Ready;
+
                 if (CanBeDistributed(nextTask))
                 {
                     LanuchRemoteTask(nextTask);
@@ -174,7 +176,7 @@ namespace ParallelTaskScheduler.Src
                 // create meet point for sync - wait for remote response
                 bool createdNew;
                 IMeetPoint meetPoint = MeetPointFactory.Create(taskItem.ID, out createdNew);
-                meetPoint.PostCondArrive(null);
+                meetPoint.PreCondArrive(null);
             };
 
             bgWorder.RunWorkerCompleted += (object sender, RunWorkerCompletedEventArgs e) =>

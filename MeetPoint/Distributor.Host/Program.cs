@@ -10,6 +10,8 @@ using System.IO;
 using log4net;
 using Distributor.Service.Src.Contract;
 using ParallelTaskScheduler.Src;
+using Distributor.TestUtil.Task;
+using ParallelTaskScheduler.Src.TaskFactory;
 
 namespace Distributor.Host
 {
@@ -55,6 +57,10 @@ namespace Distributor.Host
             //
             // set local host name
             ParallelTaskScheduler.Src.ParallelTaskScheduler.LocalHostName = "client-from-host";
+
+            //
+            // init task factory
+            TaskFactoryRender.SetFactory(new TaskFactoryImpl());
 
             //
             // start remote task server

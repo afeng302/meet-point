@@ -8,6 +8,7 @@ using Distributor.Service.Src.Util;
 using System.Reflection;
 using System.IO;
 using log4net;
+using ParallelTaskScheduler.Src.TaskFactory;
 
 namespace ParallelTaskScheduler.Util
 {
@@ -24,6 +25,7 @@ namespace ParallelTaskScheduler.Util
                 ID = taskItem.ID,
                 Name = taskItem.Name,
                 TypeName = taskItem.GetType().ToString(),
+                Status = taskItem.Status,
                 Params = taskItem.BoxFlyParams(),
                 Files = taskItem.BoxFlyFiles(),
             };
@@ -35,8 +37,10 @@ namespace ParallelTaskScheduler.Util
         {
             Guard.ArgumentNotNull(transferTaskItem, "transferTaskItem");
 
-            ITaskItem taskItem = System.Reflection.Assembly.GetAssembly(Type.GetType(transferTaskItem.TypeName))
-                .CreateInstance(transferTaskItem.TypeName) as ITaskItem;
+            ITaskItem taskItem = TaskFactoryRender.GetFactory().CreateTask(transferTaskItem.TypeName);
+
+            //ITaskItem taskItem = System.Reflection.Assembly.GetAssembly(Type.GetType(transferTaskItem.TypeName))
+            //    .CreateInstance(transferTaskItem.TypeName) as ITaskItem;
 
             taskItem.ID = transferTaskItem.ID;
             UnboxTask(transferTaskItem, taskItem);
@@ -54,6 +58,8 @@ namespace ParallelTaskScheduler.Util
             {
                 throw new Exception("task ID mismatch");
             }
+
+            taskItem.Status = transferTaskItem.Status;
 
             taskItem.UnboxFlyParams(transferTaskItem.Params);
 

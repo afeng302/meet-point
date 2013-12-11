@@ -9,15 +9,10 @@ using log4net;
 using System.Reflection;
 using Distributor.Service.Src.Contract;
 
-namespace Distributor.Client.Task
+namespace Distributor.TestUtil.Task
 {
-    class PrepareData : ITaskItem
+    public class PrepareData : ITaskItem
     {
-        public PrepareData()
-        {
-            this.Status = Service.Src.Contract.TaskStatus.Ready;
-        }
-
         public string Name
         {
             get
@@ -44,7 +39,7 @@ namespace Distributor.Client.Task
             }
             set
             {
-                throw new NotImplementedException();
+                this.taskID = value;
             }
         }
 
@@ -97,12 +92,12 @@ namespace Distributor.Client.Task
             if (this.Status == Service.Src.Contract.TaskStatus.Ready)
             {
                 // request
-                this.RadioDataPath = flyFiles[1];
+                this.RadioDataPath = flyFiles[0];
             }
             else if (this.Status == Service.Src.Contract.TaskStatus.Completed)
             {
                 // response
-                this.OutputDataFlyPath = flyFiles[1];
+                this.OutputDataFlyPath = flyFiles[0];
             }
         }
 

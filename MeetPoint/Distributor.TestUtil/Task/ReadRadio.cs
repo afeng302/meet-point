@@ -2,21 +2,22 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
+using Distributor.Service.Src.Contract;
 using ParallelTaskScheduler.Src;
 using log4net;
 using System.Reflection;
-using System.Threading;
 using System.IO;
+using System.Threading;
 
-namespace Distributor.Client.Task
+namespace Distributor.TestUtil.Task
 {
-    class WriteRadio : ITaskItem
+    public class ReadRadio : ITaskItem
     {
         public string Name
         {
             get
             {
-                return "Write-Radio";
+                return "Read-Radio";
             }
             set
             {
@@ -38,7 +39,7 @@ namespace Distributor.Client.Task
             }
             set
             {
-                throw new NotImplementedException();
+                this.taskID = value;
             }
         }
 
@@ -53,7 +54,7 @@ namespace Distributor.Client.Task
             set;
         }
 
-        public Service.Src.Contract.TaskExecuteType ExecuteType
+        public TaskExecuteType ExecuteType
         {
             get;
             set;
@@ -83,21 +84,25 @@ namespace Distributor.Client.Task
         {
             Log.InfoFormat("task [{0}]/[{1}] is executing ...", this.Name, this.ID);
 
-            // prepare the radio data
-            string inputFilePath = (string)this.OwnContainer.GetTaskContext("Prepare-Data");
-            using (StreamReader sr = new StreamReader(inputFilePath))
+            // create temp file
+            string dir = Path.GetDirectoryName(this.RadioDataPath);
+            if (!Directory.Exists(dir))
             {
-                using (StreamWriter sw = new StreamWriter(this.RadioDataPath, false))
-                {
-                    // copy the first line
-                    string nextLine = sr.ReadLine();
-                    sw.WriteLine(nextLine);
+                Directory.CreateDirectory(dir);
+            }
+            using (StreamWriter sw = new StreamWriter(this.RadioDataPath, false))
+            {
+                // the first line is GUID of this task
+                sw.WriteLine(this.ID);
 
-                    while (!sr.EndOfStream)
+                // place holders
+                for (int i = 0; i < 100; i++)
+                {
+                    for (int j = 0; j < 100; j++)
                     {
-                        nextLine = sr.ReadLine();
-                        sw.WriteLine("Written-" + nextLine);
+                        sw.Write(j.ToString() + "-");
                     }
+                    sw.WriteLine();
                 }
             }
 
@@ -108,6 +113,9 @@ namespace Distributor.Client.Task
 
         public void Complete()
         {
+            // put the data into task container
+            this.OwnContainer.SetTaskContext(this.Name, this.RadioDataPath);
+
             if (this.TaskCompleted != null)
             {
                 this.TaskCompleted(this, null);
@@ -126,7 +134,7 @@ namespace Distributor.Client.Task
         {
             get
             {
-                return string.Format(@"./temp/{0}/write-radio.dat", this.ID);
+                return string.Format(@"./temp/{0}/read-radio.dat", this.ID);
             }
         }
 
