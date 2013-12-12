@@ -52,7 +52,6 @@
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="Src\RemoteTaskExecutor.cs" />
     <Compile Include="Src\RemoteTaskServer.cs" />
-    <Compile Include="Src\RemoteTaskTransferor.cs" />
     <Compile Include="Src\ServiceFactory.cs" />
     <Compile Include="Src\TaskContainer.cs" />
     <Compile Include="Src\ParallelTaskNode.cs" />

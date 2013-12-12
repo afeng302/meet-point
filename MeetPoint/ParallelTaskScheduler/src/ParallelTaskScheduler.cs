@@ -48,6 +48,24 @@ namespace ParallelTaskScheduler.Src
             } while (currTaskNode != null);
         }
 
+        public static void ScheduleAsync(TaskContainer container)
+        {
+            BackgroundWorker worker = new BackgroundWorker();
+
+            worker.DoWork += (object sender, DoWorkEventArgs e) =>
+                {
+                    Schedule(container);
+                };
+            worker.RunWorkerCompleted += (object sender, RunWorkerCompletedEventArgs e) =>
+                {
+                    Log.InfoFormat("container is executed completly.");
+                };
+
+            worker.RunWorkerAsync();
+
+            Log.InfoFormat("task is scheduled async ...");
+        }
+
         public static ITaskItem GetDistributedTask(string taskID)
         {
             Guard.ArgumentNotNullOrEmpty(taskID, "taskID");
@@ -133,7 +151,7 @@ namespace ParallelTaskScheduler.Src
                 {
                     taskItem.Status = TaskStatus.Completed;
                 }
-                
+
                 taskItem.Complete();
             };
 
@@ -189,7 +207,7 @@ namespace ParallelTaskScheduler.Src
 
                 // complete task
                 taskItem.Complete();
-                
+
                 // remove from pending map
                 lock (DISTRIBUTED_TASK_MAP)
                 {

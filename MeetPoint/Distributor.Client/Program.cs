@@ -62,7 +62,15 @@ namespace Distributor.Client
             // schedule task
             TaskContainer container = new TaskContainer().AddOrdered(new ReadRadio())
                 .AddOrdered(new PrepareData()).AddOrdered(new WriteRadio());
-            ParallelTaskScheduler.Src.ParallelTaskScheduler.Schedule(container);
+            ParallelTaskScheduler.Src.ParallelTaskScheduler.ScheduleAsync(container);
+
+            container = new TaskContainer().AddOrdered(new ReadRadio())
+                .AddOrdered(new PrepareData()).AddOrdered(new WriteRadio());
+            ParallelTaskScheduler.Src.ParallelTaskScheduler.ScheduleAsync(container);
+
+            container = new TaskContainer().AddOrdered(new ReadRadio())
+                .AddOrdered(new PrepareData()).AddOrdered(new WriteRadio());
+            ParallelTaskScheduler.Src.ParallelTaskScheduler.ScheduleAsync(container);
             
             Console.ReadLine();
 
