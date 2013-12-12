@@ -65,6 +65,20 @@ namespace Distributor.Service.Src.Service
             return PayloadManager.GetRelaxedNode();
         }
 
+        public void IncreasePayload(string hostName)
+        {
+            Guard.ArgumentNotNullOrEmpty(hostName, "hostName");
+
+            PayloadManager.IncreasePayload(hostName);
+        }
+
+        public void ReducePayload(string hostName)
+        {
+            Guard.ArgumentNotNullOrEmpty(hostName, "hostName");
+
+            PayloadManager.ReducePayload(hostName);
+        }
+
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);
     }
 }

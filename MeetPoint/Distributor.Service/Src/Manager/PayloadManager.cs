@@ -90,7 +90,7 @@ namespace Distributor.Service.Src.Manager
 
         public static string GetRelaxedNode()
         {
-            int minPayload = -1;
+            int minPayload = int.MaxValue;
             string relaxedHost = string.Empty;
 
             lock (PAYLOAD_MAP)
@@ -103,7 +103,7 @@ namespace Distributor.Service.Src.Manager
 
                 foreach (string nextHost in PAYLOAD_MAP.Keys)
                 {
-                    if (PAYLOAD_MAP[nextHost] > minPayload)
+                    if (PAYLOAD_MAP[nextHost] < minPayload)
                     {
                         minPayload = PAYLOAD_MAP[nextHost];
                         relaxedHost = nextHost;

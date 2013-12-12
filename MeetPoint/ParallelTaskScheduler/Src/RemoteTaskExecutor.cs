@@ -46,6 +46,9 @@ namespace ParallelTaskScheduler.Src
         {
             Guard.ArgumentNotNull(requTask, "requTask");
 
+            // increase payload
+            ServiceFactory.GetTaskService().IncreasePayload(requTask.DestNode);
+
             // unbox task
             ITaskItem requTaskItem = TransferHelper.UnboxTask(requTask);
 

@@ -11,6 +11,7 @@ using System.Diagnostics;
 using ParallelTaskScheduler.Src;
 using Distributor.TestUtil.Task;
 using ParallelTaskScheduler.Src.TaskFactory;
+using System.Threading;
 
 namespace Distributor.Client
 {
@@ -63,11 +64,11 @@ namespace Distributor.Client
             TaskContainer container = new TaskContainer().AddOrdered(new ReadRadio())
                 .AddOrdered(new PrepareData()).AddOrdered(new WriteRadio());
             ParallelTaskScheduler.Src.ParallelTaskScheduler.ScheduleAsync(container);
-
+            Thread.Sleep(200);
             container = new TaskContainer().AddOrdered(new ReadRadio())
                 .AddOrdered(new PrepareData()).AddOrdered(new WriteRadio());
             ParallelTaskScheduler.Src.ParallelTaskScheduler.ScheduleAsync(container);
-
+            Thread.Sleep(200);
             container = new TaskContainer().AddOrdered(new ReadRadio())
                 .AddOrdered(new PrepareData()).AddOrdered(new WriteRadio());
             ParallelTaskScheduler.Src.ParallelTaskScheduler.ScheduleAsync(container);

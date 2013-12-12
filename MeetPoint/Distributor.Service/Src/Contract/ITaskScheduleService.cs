@@ -20,5 +20,11 @@ namespace Distributor.Service.Src.Contract
 
         [OperationContract]
         string GetRelaxedNode();
+
+        [OperationContract]
+        void IncreasePayload(string hostName);
+
+        [OperationContract]
+        void ReducePayload(string hostName);
     }
 }

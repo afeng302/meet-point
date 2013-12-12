@@ -133,6 +133,9 @@ namespace ParallelTaskScheduler.Src
 
             bgWorder.DoWork += (object sender, DoWorkEventArgs e) =>
             {
+                // increase playload
+                ServiceFactory.GetTaskService().IncreasePayload(LocalHostName);
+
                 // set execute type
                 taskItem.ExecuteType = TaskExecuteType.Locally;
                 taskItem.Status = TaskStatus.Running;
@@ -141,6 +144,9 @@ namespace ParallelTaskScheduler.Src
 
             bgWorder.RunWorkerCompleted += (object sender, RunWorkerCompletedEventArgs e) =>
             {
+                // reduce payload
+                ServiceFactory.GetTaskService().ReducePayload(LocalHostName);
+
                 if (e.Error != null)
                 {
                     Log.ErrorFormat("local task execution error. Message[{0}]\r\nStackTrace[{1}]",
