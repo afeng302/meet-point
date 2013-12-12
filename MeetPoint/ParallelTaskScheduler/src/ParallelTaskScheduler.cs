@@ -17,7 +17,18 @@ namespace ParallelTaskScheduler.Src
     {
         private static Dictionary<string, ITaskItem> DISTRIBUTED_TASK_MAP = new Dictionary<string, ITaskItem>();
 
+        static ParallelTaskScheduler()
+        {
+            IsClusterMode = false;
+        }
+
         public static string LocalHostName
+        {
+            get;
+            set;
+        }
+
+        public static bool IsClusterMode
         {
             get;
             set;
@@ -112,7 +123,7 @@ namespace ParallelTaskScheduler.Src
             {
                 nextTask.Status = TaskStatus.Ready;
 
-                if (CanBeDistributed(nextTask))
+                if (IsClusterMode && CanBeDistributed(nextTask))
                 {
                     LanuchRemoteTask(nextTask);
                 }
@@ -134,7 +145,10 @@ namespace ParallelTaskScheduler.Src
             bgWorder.DoWork += (object sender, DoWorkEventArgs e) =>
             {
                 // increase playload
-                ServiceFactory.GetTaskService().IncreasePayload(LocalHostName);
+                if (IsClusterMode)
+                {
+                    ServiceFactory.GetTaskService().IncreasePayload(LocalHostName, taskItem.PayloadFactor);
+                }
 
                 // set execute type
                 taskItem.ExecuteType = TaskExecuteType.Locally;
@@ -145,7 +159,10 @@ namespace ParallelTaskScheduler.Src
             bgWorder.RunWorkerCompleted += (object sender, RunWorkerCompletedEventArgs e) =>
             {
                 // reduce payload
-                ServiceFactory.GetTaskService().ReducePayload(LocalHostName);
+                if (IsClusterMode)
+                {
+                    ServiceFactory.GetTaskService().DecreasePayload(LocalHostName, taskItem.PayloadFactor);
+                }
 
                 if (e.Error != null)
                 {
@@ -234,7 +251,12 @@ namespace ParallelTaskScheduler.Src
 
             // if it is not myself?
 
-            return taskItem.IsDistributable;
+            if (IsClusterMode)
+            {
+                return taskItem.IsDistributable;
+            }
+
+            return false;
         }
 
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);

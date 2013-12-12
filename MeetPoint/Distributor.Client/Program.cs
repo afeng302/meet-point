@@ -20,36 +20,32 @@ namespace Distributor.Client
         static void Main(string[] args)
         {
             InstanceContext instanceContext = new InstanceContext(new CallbackPushTaskService());
-            ILogin loginProxy = null; 
-            //CommunicationState state;
-            //MeetPoint.Src.
-            //using (DuplexChannelFactory<ILogin> channelFactory = new DuplexChannelFactory<ILogin>(instanceContext, "login"))
-            //{
-            //    loginProxy = channelFactory.CreateChannel();
-            //    loginProxy.Login("test login");
+            ILogin loginProxy = null;
 
-            //    //(loginProxy as ICommunicationObject).Close();
-            //    state = (loginProxy as ICommunicationObject).State;
-            //    Console.ReadLine();
-            //}
-
-            //state = (loginProxy as ICommunicationObject).State;
-
-            //ILogin loginProxy = ServiceProxyFactory.Create<ILogin>("login");
+            string masterHostName = "localhost";
+            string localHostName = "client-01";
+            if (args.Length > 1)
+            {
+                masterHostName = args[0];
+                localHostName = args[1];
+            }
 
             //
             // Login
-            loginProxy = ServiceProxyFactory.Create<ILogin>(instanceContext, "LoginService", "net.tcp://localhost:1234/login");
-            loginProxy.Login("client-01");
+            loginProxy = ServiceProxyFactory.Create<ILogin>(instanceContext, 
+                "LoginService", string.Format("net.tcp://{0}:1234/login", masterHostName));
+            loginProxy.Login(localHostName);
 
             //
             // init service factory
             ServiceFactory.ENFileRepoService = "FileRepositoryService";
             ServiceFactory.ENTaskScheduleService = "TaskScheduleService";
-            
+            ServiceFactory.MastNodeName = masterHostName;
+
             //
-            // set local host name
-            ParallelTaskScheduler.Src.ParallelTaskScheduler.LocalHostName = "client-01";
+            // init ParallelTaskScheduler 
+            ParallelTaskScheduler.Src.ParallelTaskScheduler.LocalHostName = localHostName;
+            ParallelTaskScheduler.Src.ParallelTaskScheduler.IsClusterMode = true;
 
             //
             // init task factory

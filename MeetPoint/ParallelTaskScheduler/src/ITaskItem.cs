@@ -18,6 +18,8 @@ namespace ParallelTaskScheduler.Src
 
         TaskStatus Status { get; set; }
 
+        int PayloadFactor { get; }
+
         TaskExecuteType ExecuteType { get; set; }
 
         ValueType[] BoxFlyParams();

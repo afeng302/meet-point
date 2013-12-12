@@ -32,6 +32,15 @@ namespace ParallelTaskScheduler.Test
 
         public bool IsDistributable { get; private set; }
 
+        public int PayloadFactor
+        {
+            get
+            {
+                return 0;
+            }
+
+        }
+
         public void PreExecute()
         {
         }

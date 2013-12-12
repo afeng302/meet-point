@@ -54,6 +54,11 @@ namespace Distributor.TestUtil.Task
             set;
         }
 
+        public int PayloadFactor
+        {
+            get { return 10; }
+        }
+
         public TaskExecuteType ExecuteType
         {
             get;

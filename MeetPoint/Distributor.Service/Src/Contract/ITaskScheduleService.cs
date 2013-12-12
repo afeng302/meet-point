@@ -22,9 +22,9 @@ namespace Distributor.Service.Src.Contract
         string GetRelaxedNode();
 
         [OperationContract]
-        void IncreasePayload(string hostName);
+        void IncreasePayload(string hostName, int payloadFactor);
 
         [OperationContract]
-        void ReducePayload(string hostName);
+        void DecreasePayload(string hostName, int payloadFactor);
     }
 }

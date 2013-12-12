@@ -15,13 +15,16 @@ namespace ParallelTaskScheduler.Src
     class RemoteTaskExecutor
     {
         private TransferTaskItem transferTask = null;
+        BackgroundWorker worker = new BackgroundWorker();
 
         public RemoteTaskExecutor(TransferTaskItem transferTaskItem)
         {
             this.transferTask = transferTaskItem;
+
+            this.worker.DoWork += new DoWorkEventHandler(worker_DoWork);
         }
 
-        public void Run()
+        void worker_DoWork(object sender, DoWorkEventArgs e)
         {
             // check task transfer type
             if (this.transferTask.TaskTransferType == TransferType.Request)
@@ -38,6 +41,11 @@ namespace ParallelTaskScheduler.Src
             }
         }
 
+        public void Run()
+        {
+            this.worker.RunWorkerAsync();
+        }
+
         /// <summary>
         /// Execute the remote task
         /// </summary>
@@ -46,11 +54,11 @@ namespace ParallelTaskScheduler.Src
         {
             Guard.ArgumentNotNull(requTask, "requTask");
 
-            // increase payload
-            ServiceFactory.GetTaskService().IncreasePayload(requTask.DestNode);
-
             // unbox task
             ITaskItem requTaskItem = TransferHelper.UnboxTask(requTask);
+
+            // increase payload
+            ServiceFactory.GetTaskService().IncreasePayload(requTask.DestNode, requTaskItem.PayloadFactor);
 
             // execute task
             requTaskItem.ExecuteType = TaskExecuteType.Remotely;
@@ -68,6 +76,9 @@ namespace ParallelTaskScheduler.Src
             // set the task status
             requTaskItem.Status = TaskStatus.Completed;
 
+            // decrease payload
+
+            ServiceFactory.GetTaskService().DecreasePayload(requTask.DestNode, requTaskItem.PayloadFactor);
             // box the task
             TransferTaskItem respTask = TransferHelper.BoxTask(requTaskItem);
             

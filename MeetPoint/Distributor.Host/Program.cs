@@ -55,8 +55,9 @@ namespace Distributor.Host
             ServiceFactory.ENTaskScheduleService = "TaskScheduleService";
 
             //
-            // set local host name
+            // init ParallelTaskSchedulerset local host name
             ParallelTaskScheduler.Src.ParallelTaskScheduler.LocalHostName = "client-from-host";
+            ParallelTaskScheduler.Src.ParallelTaskScheduler.IsClusterMode = true;
 
             //
             // init task factory

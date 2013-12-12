@@ -45,7 +45,7 @@ namespace Distributor.Service.Src.Manager
             Log.InfoFormat("[{0}] was removed from payload map", hostName);
         }
 
-        public static void IncreasePayload(string hostName)
+        public static void IncreasePayload(string hostName, int payload)
         {
             Guard.ArgumentNotNullOrEmpty(hostName, "hostName");
 
@@ -57,13 +57,13 @@ namespace Distributor.Service.Src.Manager
                     return;
                 }
 
-                PAYLOAD_MAP[hostName]++;
-            }
+                PAYLOAD_MAP[hostName] += payload;
 
-            Log.InfoFormat("payload on [{0}] was increased", hostName);
+                Log.InfoFormat("payload on [{0}] was increased to [{1}]", hostName, PAYLOAD_MAP[hostName]);
+            }
         }
 
-        public static void ReducePayload(string hostName)
+        public static void DecreasePayload(string hostName, int payload)
         {
             Guard.ArgumentNotNullOrEmpty(hostName, "hostName");
 
@@ -75,7 +75,7 @@ namespace Distributor.Service.Src.Manager
                     return;
                 }
 
-                PAYLOAD_MAP[hostName]--;
+                PAYLOAD_MAP[hostName] -= payload;
 
                 if (PAYLOAD_MAP[hostName] < 0)
                 {
@@ -83,9 +83,9 @@ namespace Distributor.Service.Src.Manager
 
                     PAYLOAD_MAP[hostName] = 0;
                 }
-            }
 
-            Log.InfoFormat("payload on [{0}] was reduced", hostName);
+                Log.InfoFormat("payload on [{0}] was reduced to [{1}]", hostName, PAYLOAD_MAP[hostName]);
+            }
         }
 
         public static string GetRelaxedNode()
