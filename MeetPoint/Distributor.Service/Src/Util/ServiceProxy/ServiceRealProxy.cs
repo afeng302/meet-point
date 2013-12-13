@@ -51,7 +51,9 @@ namespace Distributor.Service.Src.Util.ServiceProxy
             }
             else
             {
-                channel = channelFactory.CreateChannel(new EndpointAddress(this.Uri));
+                // http://blogs.msdn.com/b/tiche/archive/2011/07/13/wcf-on-intranet-with-windows-authentication-kerberos-or-ntlm-part-1.aspx
+                channel = channelFactory.CreateChannel(
+                    new EndpointAddress(new Uri(this.Uri), EndpointIdentity.CreateSpnIdentity("MySystem/Service1")));
             }
 
             IMethodCallMessage methodCall = (IMethodCallMessage)msg;
