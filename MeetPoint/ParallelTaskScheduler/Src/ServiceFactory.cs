@@ -9,6 +9,8 @@ namespace ParallelTaskScheduler.Src
 {
     public static class ServiceFactory
     {
+        public static string ENLoginService { get; set; }
+
         public static string ENTaskScheduleService { get; set; }
 
         public static string ENFileRepoService { get; set; }

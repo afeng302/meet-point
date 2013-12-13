@@ -9,6 +9,8 @@ using MeetPoint.Src;
 using Distributor.Service.Src.Contract;
 using System.IO;
 using ParallelTaskScheduler.Util;
+using Distributor.Service.Src.Util;
+using System.Threading;
 
 namespace ParallelTaskScheduler.Src
 {
@@ -21,6 +23,8 @@ namespace ParallelTaskScheduler.Src
         static Queue<TransferTaskItem> SEND_QUEUE = new Queue<TransferTaskItem>();
         static BackgroundWorker SEND_WORKER = new BackgroundWorker();
         static IMeetPoint SEND_MEET_POINT = null;
+
+        static BackgroundWorker HEARTBEAT_WORKER = new BackgroundWorker();
 
         static RemoteTaskServer()
         {
@@ -39,6 +43,10 @@ namespace ParallelTaskScheduler.Src
 
             createdNew = false;
             SEND_MEET_POINT = MeetPointFactory.Create(Guid.NewGuid().ToString(), 1, 1, out createdNew);
+
+            HEARTBEAT_WORKER.WorkerSupportsCancellation = true;
+            HEARTBEAT_WORKER.DoWork += new DoWorkEventHandler(HEARTBEAT_WORKER_DoWork);
+            HEARTBEAT_WORKER.RunWorkerCompleted += new RunWorkerCompletedEventHandler(HEARTBEAT_WORKER_RunWorkerCompleted);
         }
 
         public static string MasterNodeName { get; set; }
@@ -47,12 +55,14 @@ namespace ParallelTaskScheduler.Src
         {
             RECV_WORKER.RunWorkerAsync();
             SEND_WORKER.RunWorkerAsync();
+            HEARTBEAT_WORKER.RunWorkerAsync();
         }
 
         public static void Stop()
         {
             RECV_WORKER.CancelAsync();
             SEND_WORKER.CancelAsync();
+            HEARTBEAT_WORKER.CancelAsync();
         }
 
         public static void PendRecvTask(string taskID)
@@ -206,6 +216,41 @@ namespace ParallelTaskScheduler.Src
                 ServiceFactory.GetTaskService().PushTask(sendTask);
                 Log.InfoFormat("pushed task: [{0}]", sendTask.ID);
             } while (true);
+        }
+
+        static void HEARTBEAT_WORKER_DoWork(object sender, DoWorkEventArgs e)
+        {
+            while (true)
+            {
+                if (HEARTBEAT_WORKER.CancellationPending)
+                {
+                    return;
+                }
+
+                ILogin loginService = ServiceProxyFactory.GetOpenedDuplexChannel<ILogin>(ServiceFactory.ENLoginService);
+                loginService.Heartbeat();
+                Log.InfoFormat("heartbeat was sent.");
+
+                Thread.Sleep(30 * 1000);
+
+            } // while (true)
+        }
+
+        static void HEARTBEAT_WORKER_RunWorkerCompleted(object sender, RunWorkerCompletedEventArgs e)
+        {
+            if (!e.Cancelled)
+            {
+                // terminated unexpected
+                Log.ErrorFormat("heartbeat worker terminated unexpected. {0}", e.Error);
+
+                // start the background worker again
+                Log.Info("heartbeat worker was restarted again ...");
+                HEARTBEAT_WORKER.RunWorkerAsync();
+
+                return;
+            }
+
+            Log.Info("heartbeat worker existed.");
         }
 
         private static readonly ILog Log = LogManager.GetLogger(MethodBase.GetCurrentMethod().DeclaringType);

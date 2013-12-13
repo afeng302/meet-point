@@ -40,11 +40,29 @@ namespace Distributor.Service.Src.Service
             (callback as ICommunicationObject).Faulted += new EventHandler(LoginService_Faulted);
         }
 
+        public void Logout()
+        {
+            // close callback channel
+            CallbackChannelManager.CloseCallbackChannel(this.clientHostName);
+
+            // remove callback channel
+            CallbackChannelManager.RemoveCallbackChannel(this.clientHostName);
+
+            Log.InfoFormat("Logout: [{0}]", this.clientHostName);
+        }
+
+
+        public void Heartbeat()
+        {
+            Log.InfoFormat("Heartbeat from [{0}] ...", this.clientHostName);
+        }
+
         void LoginService_Faulted(object sender, EventArgs e)
         {
             Console.WriteLine(clientHostName + " Faulted !!!");
             PushTaskExecutor.RemoveTask(this.callback);
 
+            CallbackChannelManager.CloseCallbackChannel(this.clientHostName);
             CallbackChannelManager.RemoveCallbackChannel(this.clientHostName);
             PayloadManager.RemoveNode(this.clientHostName);
 
@@ -56,6 +74,7 @@ namespace Distributor.Service.Src.Service
             Console.WriteLine(clientHostName + " Closed !!!");
             PushTaskExecutor.RemoveTask(this.callback);
 
+            CallbackChannelManager.CloseCallbackChannel(this.clientHostName);
             CallbackChannelManager.RemoveCallbackChannel(this.clientHostName);
             PayloadManager.RemoveNode(this.clientHostName);
 

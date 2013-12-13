@@ -33,5 +33,12 @@ namespace Distributor.Service.Src.Util
 
             return (T)(new ServiceRealProxy<T>(callbackInstance, endpointName, uri).GetTransparentProxy());
         }
+
+        public static T GetOpenedDuplexChannel<T>(string endpointName)
+        {
+            Guard.NotNullOrEmpty(() => endpointName);
+
+            return ServiceRealProxy<T>.GetOpenedDuplexChannel(endpointName);
+        }
     }
 }

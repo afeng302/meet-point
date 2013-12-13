@@ -11,5 +11,11 @@ namespace Distributor.Service.Src.Contract
     {
         [OperationContract]
         void Login(string clientHostName);
+
+        [OperationContract]
+        void Logout();
+
+        [OperationContract]
+        void Heartbeat();
     }
 }
