@@ -60,16 +60,6 @@ namespace Distributor.Service.Src.Util.ServiceProxy
 
             lock (DUPLEX_CHANNEL_MAP)
             {
-<<<<<<< HEAD
-                channel = channelFactory.CreateChannel();
-            }
-            else
-            {
-                // http://blogs.msdn.com/b/tiche/archive/2011/07/13/wcf-on-intranet-with-windows-authentication-kerberos-or-ntlm-part-1.aspx
-                channel = channelFactory.CreateChannel(
-                    new EndpointAddress(new Uri(this.Uri), EndpointIdentity.CreateSpnIdentity("MySystem/Service1")));
-            }
-=======
                 // check the duplex channel
                 if (DUPLEX_CHANNEL_MAP.ContainsKey(this.endpointName)
                     && ((DUPLEX_CHANNEL_MAP[this.endpointName] as ICommunicationObject).State == CommunicationState.Opened))
@@ -86,7 +76,9 @@ namespace Distributor.Service.Src.Util.ServiceProxy
                     }
                     else
                     {
-                        channel = channelFactory.CreateChannel(new EndpointAddress(this.Uri));
+                        // http://blogs.msdn.com/b/tiche/archive/2011/07/13/wcf-on-intranet-with-windows-authentication-kerberos-or-ntlm-part-1.aspx
+                        channel = channelFactory.CreateChannel(
+                        new EndpointAddress(new Uri(this.Uri), EndpointIdentity.CreateSpnIdentity("MySystem/Service1")));
                     }
 
                     // cache duplex channel
@@ -96,7 +88,6 @@ namespace Distributor.Service.Src.Util.ServiceProxy
                     }
                 }
             } // lock (this.duplexChannelMap)
->>>>>>> remotes/a23126-04/master
 
             IMethodCallMessage methodCall = (IMethodCallMessage)msg;
 
