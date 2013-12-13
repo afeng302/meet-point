@@ -13,6 +13,7 @@ namespace Distributor.Service.Src.Util.ServiceProxy
         private string endpointName = string.Empty;
         private InstanceContext callbackInstance = null;
         private string Uri = string.Empty;
+        private static Dictionary<string, T> DUPLEX_CHANNEL_MAP = new Dictionary<string, T>();
 
         public ServiceRealProxy(string endpointName)
             : this(null, endpointName, string.Empty)
@@ -39,14 +40,27 @@ namespace Distributor.Service.Src.Util.ServiceProxy
             this.Uri = Uri;
         }
 
+        public static T GetOpenedDuplexChannel(string endpointName)
+        {
+            lock (DUPLEX_CHANNEL_MAP)
+            {
+                if (DUPLEX_CHANNEL_MAP.ContainsKey(endpointName)
+                    && ((DUPLEX_CHANNEL_MAP[endpointName] as ICommunicationObject).State == CommunicationState.Opened))
+                {
+                    return DUPLEX_CHANNEL_MAP[endpointName];
+                }
+
+                return default(T);
+            }
+        }
+
         public override IMessage Invoke(IMessage msg)
         {
-            ChannelFactory<T> channelFactory = ChannelFactoryCreator.Create<T>(this.callbackInstance, this.endpointName);
-
             T channel = default(T);
 
-            if (string.IsNullOrEmpty(this.Uri))
+            lock (DUPLEX_CHANNEL_MAP)
             {
+<<<<<<< HEAD
                 channel = channelFactory.CreateChannel();
             }
             else
@@ -55,6 +69,34 @@ namespace Distributor.Service.Src.Util.ServiceProxy
                 channel = channelFactory.CreateChannel(
                     new EndpointAddress(new Uri(this.Uri), EndpointIdentity.CreateSpnIdentity("MySystem/Service1")));
             }
+=======
+                // check the duplex channel
+                if (DUPLEX_CHANNEL_MAP.ContainsKey(this.endpointName)
+                    && ((DUPLEX_CHANNEL_MAP[this.endpointName] as ICommunicationObject).State == CommunicationState.Opened))
+                {
+                    channel = DUPLEX_CHANNEL_MAP[this.endpointName];
+                }
+                else
+                {
+                    // create channel
+                    ChannelFactory<T> channelFactory = ChannelFactoryCreator.Create<T>(this.callbackInstance, this.endpointName);
+                    if (string.IsNullOrEmpty(this.Uri))
+                    {
+                        channel = channelFactory.CreateChannel();
+                    }
+                    else
+                    {
+                        channel = channelFactory.CreateChannel(new EndpointAddress(this.Uri));
+                    }
+
+                    // cache duplex channel
+                    if (this.callbackInstance != null)
+                    {
+                        DUPLEX_CHANNEL_MAP[this.endpointName] = channel;
+                    }
+                }
+            } // lock (this.duplexChannelMap)
+>>>>>>> remotes/a23126-04/master
 
             IMethodCallMessage methodCall = (IMethodCallMessage)msg;
 

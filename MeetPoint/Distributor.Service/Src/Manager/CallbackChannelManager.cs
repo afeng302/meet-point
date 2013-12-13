@@ -3,6 +3,7 @@ using System.Reflection;
 using Distributor.Service.Src.Contract;
 using log4net;
 using Distributor.Service.Src.Util;
+using System.ServiceModel;
 
 namespace Distributor.Service.Src.Manager
 {
@@ -42,6 +43,22 @@ namespace Distributor.Service.Src.Manager
                 {
                     Log.InfoFormat("callback channel is removed [{0}]", clientHostName);
                 }
+            }
+        }
+
+        public static void CloseCallbackChannel(string clientHostName)
+        {
+            Guard.ArgumentNotNullOrEmpty(clientHostName, "clientHostName");
+
+            lock (CALLBACK_MAP)
+            {
+                if (!CALLBACK_MAP.ContainsKey(clientHostName))
+                {
+                    Log.ErrorFormat("callback channel not found for close [{0}]", clientHostName);
+                    return;
+                }
+
+                ((ICommunicationObject)CALLBACK_MAP[clientHostName]).Close();
             }
         }
 

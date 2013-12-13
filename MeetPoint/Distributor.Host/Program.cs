@@ -51,6 +51,7 @@ namespace Distributor.Host
 
             //
             // init service factory
+            ServiceFactory.ENLoginService = "LoginService";
             ServiceFactory.ENFileRepoService = "FileRepositoryService";
             ServiceFactory.ENTaskScheduleService = "TaskScheduleService";
 
