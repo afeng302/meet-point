@@ -22,7 +22,7 @@ namespace Distributor.Client
             InstanceContext instanceContext = new InstanceContext(new CallbackPushTaskService());
             ILogin loginProxy = null;
 
-            string masterHostName = "localhost";
+            string masterHostName = string.Empty;
             string localHostName = "client-01";
             if (args.Length > 1)
             {
@@ -32,12 +32,17 @@ namespace Distributor.Client
 
             //
             // Login
-            loginProxy = ServiceProxyFactory.Create<ILogin>(instanceContext, 
-                "LoginService", string.Format("net.tcp://{0}:1234/login", masterHostName));
+            loginProxy = ServiceProxyFactory.Create<ILogin>(instanceContext, "LoginService");
+            if (!string.IsNullOrEmpty(masterHostName))
+            {
+                loginProxy = ServiceProxyFactory.Create<ILogin>(instanceContext,
+                    "LoginService", string.Format("net.tcp://{0}:1234/login", masterHostName));
+            }
             loginProxy.Login(localHostName);
 
             //
             // init service factory
+            ServiceFactory.ENLoginService = "LoginService";
             ServiceFactory.ENFileRepoService = "FileRepositoryService";
             ServiceFactory.ENTaskScheduleService = "TaskScheduleService";
             ServiceFactory.MastNodeName = masterHostName;

@@ -58,7 +58,11 @@ namespace Distributor.Service.Src.Manager
                     return;
                 }
 
-                ((ICommunicationObject)CALLBACK_MAP[clientHostName]).Close();
+                ICommunicationObject obj = CALLBACK_MAP[clientHostName] as ICommunicationObject;
+                if ((obj != null) && (obj.State == CommunicationState.Opened))
+                {
+                    ((ICommunicationObject)CALLBACK_MAP[clientHostName]).Close();
+                }
             }
         }
 

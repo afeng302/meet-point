@@ -46,7 +46,7 @@ namespace Distributor.Host
             // connect client to service
             InstanceContext instanceContext = new InstanceContext(new CallbackPushTaskService());
             ILogin loginProxy = null;
-            loginProxy = ServiceProxyFactory.Create<ILogin>(instanceContext, "LoginService", "net.tcp://localhost:1234/login");
+            loginProxy = ServiceProxyFactory.Create<ILogin>(instanceContext, "LoginService");
             loginProxy.Login("client-from-host");
 
             //
